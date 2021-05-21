@@ -34,6 +34,8 @@ public class RewardItem : RecyclingListViewItem
 
     public void AddCoins()
     {
+        /// <summary>
+        /// 点击奖励Item将调用此方法，根据用户排名分数判断是否可以领取奖励
         if (rewardData.Rank <= leaguePanel.rankScore)
         {
             leaguePanel.AddCoins();

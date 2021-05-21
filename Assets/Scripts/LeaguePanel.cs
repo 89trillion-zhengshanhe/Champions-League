@@ -14,8 +14,6 @@ public class LeaguePanel : MonoBehaviour
     [SerializeField] private Text leagueNameText;
     [SerializeField] private List<Sprite> rankIconImage;
     [SerializeField] private Text rankName;
-    [SerializeField] private GameObject rewardItemPrefab;
-    [SerializeField] private GameObject rewardScrollViewContent;
     [SerializeField] private Text totalCoinsText;
     [SerializeField] private GameObject rewardItemParent;
     private List<RewardItem.RewardChildData> data = new List<RewardItem.RewardChildData>();
@@ -27,10 +25,11 @@ public class LeaguePanel : MonoBehaviour
     private int MaxScore = 6000;
     private int StandardScore = 4000;
     public int rankScore = 3900;
+    public int userCoins = 0;
 
     private void Start()
     {
-        leagueNameText.text = leagueName + leagueSeasonNumber++.ToString();
+        leagueNameText.text = leagueName + leagueSeasonNumber++;
         rankScoreText.text = rankScore.ToString();
         CreateRewardItemData();
         theList.ItemCallback = PopulateItem;
@@ -39,12 +38,18 @@ public class LeaguePanel : MonoBehaviour
 
     private void PopulateItem(RecyclingListViewItem item, int rowIndex)
     {
+        /// <summary>
+        /// 在ScrollView生成可复用的奖励Item
+        /// </summary>
         var child = item as RewardItem;
         child.RewardData = data[rowIndex];
     }
 
     private void CreateRewardItemData()
     {
+        /// <summary>
+        /// 根据规则生成奖励Item数据
+        /// </summary>
         for (int rankScore = StandardScore; rankScore <= MaxScore; rankScore += 200)
         {
             if (rankScore % 1000 != 0 && rankScore % 200 == 0)
@@ -56,6 +61,9 @@ public class LeaguePanel : MonoBehaviour
 
     private void ShowRankIcon(int score)
     {
+        /// <summary>
+        /// 根据Rank分数显示对应的段位名字以及图标
+        /// </summary>
         rankIcon.gameObject.SetActive(true);
         rankName.gameObject.SetActive(true);
         rankIcon.preserveAspect = true;
@@ -88,6 +96,9 @@ public class LeaguePanel : MonoBehaviour
 
     public void AddRankScore()
     {
+        /// <summary>
+        /// 点击增加分数按钮调用此方法，每点击一次增加100分并且根据分数检查段位图标
+        /// </summary>
         if (rankScore < MaxScore)
         {
             rankScore += addScore;
@@ -102,7 +113,10 @@ public class LeaguePanel : MonoBehaviour
 
     public void RefeshLeague()
     {
-        leagueNameText.text = leagueName + leagueSeasonNumber++.ToString();
+        /// <summary>
+        /// 刷新赛季按钮调用此方法，每点击一次更新赛季名字以及重制Rank分数和可领取奖励
+        /// </summary>
+        leagueNameText.text = leagueName + leagueSeasonNumber++;
         if (rankScore > 4000)
         {
             rankScore = StandardScore + (rankScore - StandardScore) / 2;
@@ -122,7 +136,10 @@ public class LeaguePanel : MonoBehaviour
 
     public void AddCoins(int number = 100)
     {
-        int newCoins = Int32.Parse(totalCoinsText.text);
-        totalCoinsText.text = (newCoins + number).ToString();
+        /// <summary>
+        /// 如果用户符合领取奖励所需要的Rank分数则增加相应的金币
+        /// </summary>
+        userCoins += number;
+        totalCoinsText.text = userCoins.ToString();
     }
 }
