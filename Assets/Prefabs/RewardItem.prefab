@@ -245,6 +245,8 @@ MonoBehaviour:
   getRewardButton: {fileID: 3596886491124183761}
   rankNumber: {fileID: 683172791807199225}
   leaguePanel: {fileID: 0}
+  rewardItembutton: {fileID: 3596886491124183761}
+  rewardItemBackGroundImage: {fileID: 683172790675509515}
 --- !u!114 &3596886491124183761
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -9,6 +9,9 @@ public class RewardItem : RecyclingListViewItem
     [SerializeField] private Button getRewardButton;
     [SerializeField] private Text rankNumber;
     [SerializeField] private LeaguePanel leaguePanel;
+    public Button rewardItembutton;
+    public Image rewardItemBackGroundImage;
+    public RewardItem rewardItem;
 
     public struct RewardChildData
     {
@@ -32,10 +35,11 @@ public class RewardItem : RecyclingListViewItem
         }
     }
 
+    /// <summary>
+    /// 点击奖励Item将调用此方法，根据用户排名分数判断是否可以领取奖励
+    /// </summary>
     public void AddCoins()
     {
-        /// <summary>
-        /// 点击奖励Item将调用此方法，根据用户排名分数判断是否可以领取奖励
         if (rewardData.Rank <= leaguePanel.rankScore)
         {
             leaguePanel.AddCoins();

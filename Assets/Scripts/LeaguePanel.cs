@@ -20,7 +20,6 @@ public class LeaguePanel : MonoBehaviour
     private List<string> rankNameList = new List<string>() {"青铜", "白银", "黄金"};
     private string leagueName = "联赛";
     private int leagueSeasonNumber = 1;
-    private bool isActive = true;
     private int addScore = 100;
     private int MaxScore = 6000;
     private int StandardScore = 4000;
@@ -36,20 +35,20 @@ public class LeaguePanel : MonoBehaviour
         theList.RowCount = data.Count;
     }
 
+    /// <summary>
+    /// 在ScrollView生成可复用的奖励Item
+    /// </summary>
     private void PopulateItem(RecyclingListViewItem item, int rowIndex)
     {
-        /// <summary>
-        /// 在ScrollView生成可复用的奖励Item
-        /// </summary>
         var child = item as RewardItem;
         child.RewardData = data[rowIndex];
     }
 
+    /// <summary>
+    /// 根据规则生成奖励Item数据
+    /// </summary>
     private void CreateRewardItemData()
     {
-        /// <summary>
-        /// 根据规则生成奖励Item数据
-        /// </summary>
         for (int rankScore = StandardScore; rankScore <= MaxScore; rankScore += 200)
         {
             if (rankScore % 1000 != 0 && rankScore % 200 == 0)
@@ -59,11 +58,11 @@ public class LeaguePanel : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 根据Rank分数显示对应的段位名字以及图标
+    /// </summary>
     private void ShowRankIcon(int score)
     {
-        /// <summary>
-        /// 根据Rank分数显示对应的段位名字以及图标
-        /// </summary>
         rankIcon.gameObject.SetActive(true);
         rankName.gameObject.SetActive(true);
         rankIcon.preserveAspect = true;
@@ -94,11 +93,11 @@ public class LeaguePanel : MonoBehaviour
         leaguePanel.SetActive(!leaguePanel.activeSelf);
     }
 
+    /// <summary>
+    /// 点击增加分数按钮调用此方法，每点击一次增加100分并且根据分数检查段位图标
+    /// </summary>
     public void AddRankScore()
     {
-        /// <summary>
-        /// 点击增加分数按钮调用此方法，每点击一次增加100分并且根据分数检查段位图标
-        /// </summary>
         if (rankScore < MaxScore)
         {
             rankScore += addScore;
@@ -111,11 +110,11 @@ public class LeaguePanel : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 刷新赛季按钮调用此方法，每点击一次更新赛季名字以及重制Rank分数和可领取奖励
+    /// </summary>
     public void RefeshLeague()
     {
-        /// <summary>
-        /// 刷新赛季按钮调用此方法，每点击一次更新赛季名字以及重制Rank分数和可领取奖励
-        /// </summary>
         leagueNameText.text = leagueName + leagueSeasonNumber++;
         if (rankScore > 4000)
         {
@@ -123,22 +122,23 @@ public class LeaguePanel : MonoBehaviour
             ShowRankIcon(rankScore);
             rankScoreText.text = rankScore.ToString();
         }
-        foreach (Transform child in rewardItemParent.transform)
+        RewardItem[] childRewardItems = rewardItemParent.GetComponentsInChildren<RewardItem>();
+        foreach (var child in childRewardItems)
         {
-            Button getButton = child.GetComponent<Button>();
-            if (!getButton.enabled)
+            if (!child.rewardItembutton.enabled)
             {
-                child.Find("BackGround").GetComponent<Image>().color *= 2;
-                getButton.enabled = true;
+                child.rewardItemBackGroundImage.color *= 2;
+                child.rewardItembutton.enabled = true;
             }
         }
+        // action   func
     }
 
+    /// <summary>
+    /// 如果用户符合领取奖励所需要的Rank分数则增加相应的金币
+    /// </summary>
     public void AddCoins(int number = 100)
     {
-        /// <summary>
-        /// 如果用户符合领取奖励所需要的Rank分数则增加相应的金币
-        /// </summary>
         userCoins += number;
         totalCoinsText.text = userCoins.ToString();
     }
